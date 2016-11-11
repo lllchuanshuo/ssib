@@ -326,7 +326,7 @@ public class LoginController extends BaseController {
 		try {
 			String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();
 			pd.put(Const.SESSION_USERNAME, USERNAME);
-			String ROLE_ID = userService.findByUId(pd).get("ROLE_ID").toString();
+			String ROLE_ID = userService.findByLoginName(USERNAME).get("ROLE_ID").toString();
 			
 			pd.put("ROLE_ID", ROLE_ID);
 			

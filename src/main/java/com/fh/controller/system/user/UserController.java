@@ -42,12 +42,6 @@ import com.fh.util.ObjectExcelView;
 import com.fh.util.PathUtil;
 import com.fh.util.Tools;
 
-/** 
- * 类名称：UserController
- * 创建人：FH 
- * 创建时间：2014年6月28日
- * @version
- */
 @Controller
 @RequestMapping(value="/user")
 public class UserController extends BaseController {
@@ -77,7 +71,7 @@ public class UserController extends BaseController {
 		
 		pd.put("PASSWORD", new SimpleHash("SHA-1", pd.getString("USERNAME"), pd.getString("PASSWORD")).toString());
 		
-		if(null == userService.findByUId(pd)){
+		if(null == userService.findByLoginName(pd.getString("USERNAME"))){
 			if(Jurisdiction.buttonJurisdiction(menuUrl, "add")){userService.saveU(pd);} //判断新增权限
 			mv.addObject("msg","success");
 		}else{
@@ -98,7 +92,7 @@ public class UserController extends BaseController {
 		PageData pd = new PageData();
 		try{
 			pd = this.getPageData();
-			if(userService.findByUId(pd) != null){
+			if(userService.findByLoginName(pd.getString("USERNAME")) != null){
 				errInfo = "error";
 			}
 		} catch(Exception e){
@@ -452,11 +446,11 @@ public class UserController extends BaseController {
 				pd.put("USER_ID", this.get32UUID());										//ID
 				pd.put("NAME", listPd.get(i).getString("var1"));							//姓名
 				
-				String USERNAME = listPd.get(i).getString("var1");	//根据姓名汉字生成全拼
-				pd.put("USERNAME", USERNAME);	
-				if(userService.findByUId(pd) != null){										//判断用户名是否重复
-					USERNAME = listPd.get(i).getString("var1")+Tools.getRandomNum();
-					pd.put("USERNAME", USERNAME);
+				String userName = listPd.get(i).getString("var1");	//根据姓名汉字生成全拼
+				pd.put("USERNAME", userName);
+				if(userService.findByLoginName(userName) != null){										//判断用户名是否重复
+					userName = listPd.get(i).getString("var1")+Tools.getRandomNum();
+					pd.put("USERNAME", userName);
 				}
 				pd.put("BZ", listPd.get(i).getString("var4"));								//备注
 				if(Tools.checkEmail(listPd.get(i).getString("var3"))){						//邮箱格式不对就跳过
@@ -471,7 +465,7 @@ public class UserController extends BaseController {
 				pd.put("NUMBER", listPd.get(i).getString("var0"));							//编号已存在就跳过
 				pd.put("PHONE", listPd.get(i).getString("var2"));							//手机号
 				
-				pd.put("PASSWORD", new SimpleHash("SHA-1", USERNAME, "123").toString());	//默认密码123
+				pd.put("PASSWORD", new SimpleHash("SHA-1", userName, "123").toString());	//默认密码123
 				if(userService.findByUN(pd) != null){
 					continue;
 				}

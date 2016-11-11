@@ -33,12 +33,6 @@ import com.fh.util.Jurisdiction;
 import com.fh.util.PageData;
 import com.fh.util.RightsHelper;
 import com.fh.util.Tools;
-/** 
- * 类名称：RoleController
- * 创建人：FH 
- * 创建时间：2014年6月30日
- * @version
- */
 @Controller
 @RequestMapping(value="/role")
 public class RoleController extends BaseController {

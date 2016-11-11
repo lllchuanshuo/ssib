@@ -2,6 +2,7 @@ package com.lhd.test.path;
 
 import java.util.Properties;
 
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.junit.Test;
 
 import com.fh.util.PropertiesUtil;
@@ -14,10 +15,8 @@ public class TestPath  {
 
 	@Test
 	public void test() {
-		String s = String.valueOf(Thread.currentThread().getContextClassLoader().getResource(""));
-		System.out.println(s);
-		String d =  this.getClass().getResource("/").getPath();
-		System.out.println(d);
+		String pwd = new SimpleHash("SHA-1", "admin", "123456").toString();
+		System.out.println(pwd);
 	}
 	
 	@Test

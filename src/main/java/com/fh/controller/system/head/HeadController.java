@@ -64,7 +64,7 @@ public class HeadController extends BaseController {
 			if(null == pds){
 				String USERNAME = session.getAttribute(Const.SESSION_USERNAME).toString();	//获取当前登录者loginname
 				pd.put("USERNAME", USERNAME);
-				pds = userService.findByUId(pd);
+				pds = userService.findByLoginName(USERNAME);
 				session.setAttribute(Const.SESSION_userpds, pds);
 			}
 			

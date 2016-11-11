@@ -141,7 +141,7 @@
 	</select>
 	
 	<!-- 通过USERNAME获取数据 -->
-	<select id="findByUId" parameterType="pd" resultType="pd" useCache="false">
+	<select id="findByLoginName" parameterType="java.lang.String" resultType="pd" useCache="false">
 		select 
 			USER_ID,
 			USERNAME,

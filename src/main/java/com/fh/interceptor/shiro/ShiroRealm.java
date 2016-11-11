@@ -1,36 +1,39 @@
 package com.fh.interceptor.shiro;
 
 
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import com.fh.entity.system.User;
+import com.fh.service.system.user.UserService;
+import com.fh.util.PageData;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
+import javax.annotation.Resource;
 
-/**
- * @author fh
- *  2015-3-6
- */
+
 public class ShiroRealm extends AuthorizingRealm {
+
+	@Resource
+	private UserService userService;
 
 	/*
 	 * 登录信息和用户验证信息验证(non-Javadoc)
 	 * @see org.apache.shiro.realm.AuthenticatingRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken)
 	 */
 	@Override
-	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+	protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authcToken) throws AuthenticationException {
 
-		 String username = (String)token.getPrincipal();  				//得到用户名 
-	     String password = new String((char[])token.getCredentials()); 	//得到密码
-		
-	     if(null != username && null != password){
-	    	 return new SimpleAuthenticationInfo(username, password, getName());
-	     }else{
-	    	 return null;
-	     }
+		UsernamePasswordToken token = (UsernamePasswordToken) authcToken;
+
+		PageData user  = userService.findByLoginName(token.getUsername());
+		if(user == null){
+			throw new UnknownAccountException();// 账号不存在
+		}
+
+
+		// 认证缓存信息
+		return new SimpleAuthenticationInfo(user, user.getString("PASSWORD").toCharArray(), getName());
 	     
 	}
 	
@@ -41,8 +44,7 @@ public class ShiroRealm extends AuthorizingRealm {
 	@Override
 	protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection pc) {
 
-		System.out.println("========2");
-		
+
 		return null;
 	}
 
